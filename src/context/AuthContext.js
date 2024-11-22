@@ -36,17 +36,18 @@ const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       setIsInitialized(true)
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+      console.log("stored token", storedToken)
       if (storedToken) {
         setLoading(true)
         await axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: storedToken
+              Authorization: `Bearer ${window.localStorage.getItem(authConfig.storageTokenKeyName)}`
             }
           })
           .then(async response => {
             setLoading(false)
-            setUser({ ...response.data.userData })
+            setUser({ ...response.data})
           })
           .catch(() => {
             localStorage.removeItem('userData')
@@ -66,19 +67,25 @@ const AuthProvider = ({ children }) => {
     axios
       .post(authConfig.loginEndpoint, params)
       .then(async res => {
-        window.localStorage.setItem(authConfig.storageTokenKeyName, res.data.accessToken)
+        window.localStorage.setItem(authConfig.storageTokenKeyName, res.data.token)
       })
       .then(() => {
         axios
           .get(authConfig.meEndpoint, {
             headers: {
-              Authorization: window.localStorage.getItem(authConfig.storageTokenKeyName)
+              Authorization: `Bearer ${window.localStorage.getItem(authConfig.storageTokenKeyName)}`
             }
           })
           .then(async response => {
+            console.log("router", router)
             const returnUrl = router.query.returnUrl
-            setUser({ ...response.data.userData })
-            await window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
+            console.log("returnUrl", returnUrl)
+            setUser({ ...response.data})
+
+            await window.localStorage.setItem('userData', JSON.stringify(response.data))
+
+            console.log("response.data.userData", response.data)
+
             const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
             router.replace(redirectURL)
           })
