@@ -29,7 +29,6 @@ import themeConfig from 'src/configs/themeConfig'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
-import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustrationsV1'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -229,7 +228,6 @@ const ResetPasswordV1 = () => {
           </form>
         </CardContent>
       </Card>
-      <FooterIllustrationsV1 />
     </Box>
   )
 }

@@ -36,7 +36,6 @@ import themeConfig from 'src/configs/themeConfig'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
-import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustrationsV1'
 
 //third party import
 import * as yup from 'yup'
@@ -465,7 +464,6 @@ const RegisterV1 = () => {
           </form>
         </CardContent>
       </Card>
-      <FooterIllustrationsV1 />
     </Box>
   )
 }

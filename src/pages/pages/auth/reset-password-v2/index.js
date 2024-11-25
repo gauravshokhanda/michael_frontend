@@ -31,7 +31,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
 // ** Styled Components
 const ResetPasswordIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -150,7 +149,7 @@ const ResetPasswordV2 = () => {
               src={`/images/pages/${imageSource}-${theme.palette.mode}.png`}
             />
           </ResetPasswordIllustrationWrapper>
-          <FooterIllustrationsV2 image={<TreeIllustration alt='tree' src='/images/pages/tree-3.png' />} />
+          
         </Box>
       ) : null}
       <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>

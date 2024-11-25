@@ -29,7 +29,6 @@ import ChevronRight from 'mdi-material-ui/ChevronRight'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Custom Components Imports
-import HorizontalNavItems from './HorizontalNavItems'
 import UserIcon from 'src/layouts/components/UserIcon'
 import Translations from 'src/layouts/components/Translations'
 import CanViewNavGroup from 'src/layouts/components/acl/CanViewNavGroup'
@@ -268,7 +267,7 @@ const HorizontalNavGroup = props => {
                       : { boxShadow: theme.shadows[4] })
                   }}
                 >
-                  <HorizontalNavItems {...props} hasParent horizontalNavItems={item.children} />
+                
                 </NavigationMenu>
               </Box>
             </AnimationWrapper>

@@ -441,9 +441,9 @@ const AutocompleteComponent = ({ hidden, settings }) => {
         <IconButton color='inherit' sx={!hidden && layout === 'vertical' ? { mr: 1, ml: -2.75 } : {}}>
           <Magnify />
         </IconButton>
-        {!hidden && layout === 'vertical' ? (
+        {/* {!hidden && layout === 'vertical' ? (
           <Typography sx={{ color: 'text.disabled' }}>Search (Ctrl+/)</Typography>
-        ) : null}
+        ) : null} */}
         <Dialog fullWidth open={openDialog} fullScreen={fullScreenDialog} onClose={() => setOpenDialog(false)}>
           <Box sx={{ top: 0, width: '100%', position: 'sticky' }}>
             <Autocomplete

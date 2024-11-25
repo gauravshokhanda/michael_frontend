@@ -38,7 +38,6 @@ import BlankLayoutWithAppBar from 'src/@core/layouts/BlankLayoutWithAppBar'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -131,7 +130,6 @@ const LoginWithAppBar = () => {
               src={`/images/pages/auth-v2-login-illustration-${theme.palette.mode}.png`}
             />
           </LoginIllustrationWrapper>
-          <FooterIllustrationsV2 />
         </Box>
       ) : null}
       <RightWrapper

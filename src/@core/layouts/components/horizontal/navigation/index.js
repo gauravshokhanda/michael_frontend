@@ -7,7 +7,6 @@ import themeConfig from 'src/configs/themeConfig'
 // ** Utils
 // import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 // ** Menu Components
-import HorizontalNavItems from './HorizontalNavItems'
 
 const Navigation = props => {
   return (
@@ -24,7 +23,6 @@ const Navigation = props => {
         }
       }}
     >
-      <HorizontalNavItems {...props} />
     </Box>
   )
 }

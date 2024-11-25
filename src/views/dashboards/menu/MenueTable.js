@@ -3,10 +3,13 @@ import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import AddMenuModal from './AddMenuModal.js';
-import EditMenuModal from './EditMenuModal.js'; // Import the EditMenuModal component
+import EditMenuModal from './EditMenuModal.js';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
 
 const MenuTable = ({ refreshTable }) => {
     const [rows, setRows] = useState([]);
@@ -60,7 +63,6 @@ const MenuTable = ({ refreshTable }) => {
                 }
             });
     };
-
 
     const handleEditClick = (row) => {
         setCurrentMenu(row); // Set the selected menu data
@@ -158,7 +160,7 @@ const MenuTable = ({ refreshTable }) => {
     return (
         <>
             <Grid item xs={11} lg={11} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: "10px" }}>
-                <Button variant="contained" onClick={() => setAddModalOpen(true)}>Add Blog</Button>
+                <Button variant="contained" onClick={() => setAddModalOpen(true)}>Add Menu</Button>
             </Grid>
             <Card>
                 <DataGrid
@@ -175,23 +177,19 @@ const MenuTable = ({ refreshTable }) => {
                             minWidth: 200,
                             renderCell: ({ row }) => (
                                 <>
-                                    <Button
-                                        variant="outlined"
+                                    <IconButton
                                         color="primary"
-                                        size="small"
                                         onClick={() => handleEditClick(row)}
                                         sx={{ mr: 1 }}
                                     >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton
                                         color="error"
-                                        size="small"
                                         onClick={() => handleDelete(row.id)}
                                     >
-                                        Delete
-                                    </Button>
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </>
                             ),
                         },

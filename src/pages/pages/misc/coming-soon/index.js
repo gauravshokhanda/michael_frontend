@@ -9,7 +9,6 @@ import Box from '@mui/material/Box'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
-import FooterIllustrations from 'src/views/pages/misc/FooterIllustrations'
 
 // ** Styled Components
 const BoxWrapper = styled(Box)(({ theme }) => ({
@@ -59,7 +58,6 @@ const ComingSoon = () => {
         </BoxWrapper>
         <Img height='487' alt='coming-soon-illustration' src='/images/pages/misc-coming-soon.png' />
       </Box>
-      <FooterIllustrations />
     </Box>
   )
 }

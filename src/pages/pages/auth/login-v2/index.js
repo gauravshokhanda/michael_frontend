@@ -38,7 +38,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -133,7 +132,6 @@ const LoginV2 = () => {
               src={`/images/pages/${imageSource}-${theme.palette.mode}.png`}
             />
           </LoginIllustrationWrapper>
-          <FooterIllustrationsV2 />
         </Box>
       ) : null}
       <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>

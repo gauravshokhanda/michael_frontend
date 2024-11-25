@@ -38,7 +38,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 //third party
 import * as yup from 'yup'
 
@@ -202,7 +201,7 @@ const RegisterV2 = () => {
               src={`/images/pages/${imageSource}-${theme.palette.mode}.png`}
             />
           </RegisterIllustrationWrapper>
-          <FooterIllustrationsV2 image={<TreeIllustration alt='tree' src='/images/pages/tree-2.png' />} />
+  
         </Box>
       ) : null}
       <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>
