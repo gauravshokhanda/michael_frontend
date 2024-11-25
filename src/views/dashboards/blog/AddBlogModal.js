@@ -1,6 +1,6 @@
 // src/components/AddBlogModal.js
 import { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
 const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
@@ -9,6 +9,7 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
     const [tags, setTags] = useState('');
     const [author, setAuthor] = useState('');
     const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -51,7 +52,7 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                 setTags('');
                 setAuthor('');
                 setImage(null);
-
+                setImagePreview(null);
                 onClose(); // Close the modal after adding the blog
             } else {
                 setError(`Error: ${response.data.message}`);
@@ -65,7 +66,11 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
     };
 
     const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file) {
+            setImage(file);
+            setImagePreview(URL.createObjectURL(file)); // Generate preview URL
+        }
     };
 
     return (
@@ -125,7 +130,16 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                         onChange={handleImageChange}
                     />
                 </Button>
-                {image && <Typography sx={{ mt: 1 }}>{image.name}</Typography>}
+                {imagePreview && (
+                    <Box sx={{ mt: 2 }}>
+                        <Typography variant="subtitle2">Preview:</Typography>
+                        <img
+                            src={imagePreview}
+                            alt="Selected"
+                            style={{ maxWidth: '100%', height: 'auto', marginTop: '8px', borderRadius: '4px' }}
+                        />
+                    </Box>
+                )}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary" disabled={loading}>

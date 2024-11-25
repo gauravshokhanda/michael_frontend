@@ -19,46 +19,29 @@ import CalendarBlankOutline from 'mdi-material-ui/CalendarBlankOutline'
 import PackageVariantClosed from 'mdi-material-ui/PackageVariantClosed'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import CheckboxMarkedCircleOutline from 'mdi-material-ui/CheckboxMarkedCircleOutline'
+import MenuIcon from 'mdi-material-ui/Menu';
 
 const navigation = () => {
   return [
-    {
-      title: 'Dashboards',
-      icon: HomeOutline,
-      badgeContent: 'new',
-      badgeColor: 'error',
-      children: [
-        // {
-        //   title: 'Projects',
-        //   path: '/dashboards/projects'
-        // },
-        // {
-        //   title: 'CRM',
-        //   path: '/dashboards/crm'
-        // },
-        // {
-        //   title: 'Analytics',
-        //   path: '/dashboards/analytics'
-        // },
-        {
-          title: 'blog',
-          path: '/dashboards/blog'
-        }
-      ]
-    },
+   
     // {
     //   sectionTitle: 'Apps & Pages'
     // },
-    // {
-    //   title: 'Email',
-    //   icon: EmailOutline,
-    //   path: '/apps/email'
-    // },
-    // {
-    //   title: 'Chat',
-    //   icon: MessageOutline,
-    //   path: '/apps/chat'
-    // },
+    {
+      title: 'Blog',
+      icon: HomeOutline,
+      path: '/dashboards/blog'
+    },
+    {
+      title: 'Menu',
+      icon: MenuIcon,
+      path: '/dashboards/menu'
+    },
+    {
+      title: 'CMS',
+      icon: MessageOutline,
+      path: '/dashboards/cms'
+    },
     // {
     //   title: 'Calendar',
     //   icon: CalendarBlankOutline,
