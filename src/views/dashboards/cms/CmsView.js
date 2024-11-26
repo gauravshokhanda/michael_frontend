@@ -1,124 +1,267 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FormControl, TextField, Button, Container, Typography, Autocomplete, Chip, Box } from '@mui/material';
-// import CustomEditor from "./CustomEditor";
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import { Button, Container, Card, Grid } from '@mui/material';
+import CMSContentModal from './CMSContentModal';
+import EditCMSContentModal from './EditCMSContentModal';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const PageNameDropdown = () => {
-    const [pages, setPages] = useState([]); // State to store page names
-    const [selectedPages, setSelectedPages] = useState([]); // State for selected pages
-    const [text, setText] = useState(''); // State to store input message
-    const [status, setStatus] = useState('Active'); // State to store selected status
+const CMSContentTable = () => {
+    const [rows, setRows] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [pages, setPages] = useState([]);
+    const [selectedPages, setSelectedPages] = useState([]);
+    const [text, setText] = useState('');
+    const [status, setStatus] = useState('Active');
+    const [editRowId, setEditRowId] = useState(null);
+    const [editRowSlug, setEditRowSlug] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    // Fetch page names from API
+    // Fetch pages for dropdown
     const fetchPages = async () => {
         try {
             const response = await axios.get('http://localhost:5000/api/menus/');
-            console.log(response);
-            setPages(response.data.map((page) => page.name)); // Assuming the response contains an array of page objects
+            setPages(response.data);
         } catch (error) {
             console.error('Error fetching pages:', error);
         }
     };
 
+    // Fetch content for the table
+    const fetchContent = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get('http://localhost:5000/api/contents');
+            const contentData = response.data;
+
+            const formattedRows = contentData.map((content, index) => ({
+                id: content._id,
+                serialNumber: index + 1,
+                slug: content.slug,
+                body: content.body,
+                status: content.status,
+           
+            }));
+
+            setRows(formattedRows);
+        } catch (error) {
+            console.error('Error fetching content:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        fetchPages(); // Fetch data when the component mounts
+        fetchPages();
+        fetchContent();
     }, []);
 
-    // Handle text field change
-    const handleTextChange = (e) => {
-        setText(e.target.value);
+    // Add Modal Handlers
+    const handleOpenAddModal = () => {
+        setSelectedPages([]);
+        setText('');
+        setStatus('Active');
+        setAddModalOpen(true);
     };
 
-    // Handle status dropdown change
-    const handleStatusChange = (e) => {
-        setStatus(e.target.value);
+    const handleCloseAddModal = () => {
+        setAddModalOpen(false);
     };
 
-    // Handle submit button click
-    const handleSubmit = () => {
-        console.log('Selected Pages:', selectedPages);
-        console.log('Message:', text);
-        console.log('Status:', status);
-        // You can handle form submission logic here, e.g., send data to an API
+    const handleAddSubmit = async () => {
+        let isValid = true;
+        let errors = {};
+
+        // Validation checks
+        if (!selectedPages.length) {
+            errors.pages = 'Please select at least one page.';
+            isValid = false;
+        }
+
+        if (!text.trim()) {
+            errors.body = 'Body cannot be empty.';
+            isValid = false;
+        }
+
+        if (!status) {
+            errors.status = 'Please select a status.';
+            isValid = false;
+        }
+
+        if (!isValid) {
+            setErrorMessage(errors);
+            return;
+        }
+
+        const requestData = selectedPages.map((page) => ({
+            slug: page,
+            body: text,
+            status,
+        }));
+
+        try {
+            await Promise.all(
+                requestData.map((data) =>
+                    axios.post('http://localhost:5000/api/contents', data)
+                )
+            );
+            alert('Content added successfully!');
+            fetchContent();
+            setErrorMessage({}); // Clear errors
+            handleCloseAddModal();
+        } catch (error) {
+            console.error('Error adding content:', error);
+            setErrorMessage({ general: 'Failed to add content. Please try again.' });
+        }
     };
+
+
+
+    const handleOpenEditModal = (row) => {
+        setEditRowSlug(row.slug); // Save the slug for the selected row
+        setText(row.body);
+        setStatus(row.status);
+        setEditModalOpen(true);
+    };
+    const handleDelete = async (slug) => {
+        const confirmDelete = window.confirm(
+            'Are you sure you want to delete this content? This action cannot be undone.'
+        );
+
+        if (!confirmDelete) {
+            return; // Exit if the user cancels the deletion
+        }
+
+        try {
+            await axios.delete(`http://localhost:5000/api/contents/${slug}`);
+            fetchContent();
+        } catch (error) {
+            console.error('Error deleting content:', error);
+            alert('Failed to delete content. Please try again.');
+        }
+    };
+
+
+    const handleCloseEditModal = () => {
+        setEditModalOpen(false);
+    };
+
+    const handleEditSubmit = async () => {
+        let isValid = true;
+        let errors = {};
+
+        // Validation checks
+        if (!text.trim()) {
+            errors.body = 'Body cannot be empty.';
+            isValid = false;
+        }
+
+        if (!status) {
+            errors.status = 'Please select a status.';
+            isValid = false;
+        }
+
+        if (!isValid) {
+            setErrorMessage(errors);
+            return;
+        }
+
+        try {
+            await axios.put(`http://localhost:5000/api/contents/${editRowSlug}`, {
+                body: text,
+                status,
+            });
+            alert('Content updated successfully!');
+            fetchContent();
+            setErrorMessage({}); // Clear errors
+            handleCloseEditModal();
+        } catch (error) {
+            console.error('Error updating content:', error);
+            setErrorMessage({ general: 'Failed to update content. Please try again.' });
+        }
+    };
+
+
+
 
     return (
-        <Container
-            sx={{
-                backgroundColor: 'white',
-                boxShadow: 3,
-                padding: 4,
-                borderRadius: 2,
-                maxWidth: 800,
-                marginTop: 4,
-            }}
-        >
-            <Typography variant="h5" sx={{ marginBottom: 3, fontWeight: 'bold', }}>
-                CMS Page
-            </Typography>
-            <FormControl fullWidth>
-                <Autocomplete
-                    multiple
-                    options={pages}
-                    value={selectedPages}
-                    onChange={(event, newValue) => setSelectedPages(newValue)}
-                    renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                            <Chip
-                                key={option}
-                                label={option}
-                                {...getTagProps({ index })}
-                                sx={{ margin: 0.5 }}
-                            />
-                        ))
-                    }
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            variant="outlined"
-                            label="Select Pages"
-                            placeholder="Choose pages"
-                            sx={{ width: '90%', marginBottom: 2 }}
-                        />
-                    )}
+        <Container sx={{ marginTop: 4 }}>
+           
+            <Grid item xs={11} lg={11} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: "10px" }}>
+                <Button variant="contained" onClick={handleOpenAddModal}>Add New CMS Content</Button>
+            </Grid>
+            <Card>
+                <DataGrid
+                    rows={rows}
+                    loading={loading}
+                    columns={[
+                        { field: 'serialNumber', headerName: 'S.No', flex: 0.1, minWidth: 80 },
+                        { field: 'slug', headerName: 'Slug', flex: 0.3, minWidth: 150 },
+                        { field: 'body', headerName: 'Body', flex: 0.5, minWidth: 300 },
+                        { field: 'status', headerName: 'Status', flex: 0.2, minWidth: 120 },
+                       
+                        {
+                            field: 'actions',
+                            headerName: 'Actions',
+                            flex: 0.2,
+                            minWidth: 150,
+                            renderCell: (params) => (
+                                <>
+                                    <IconButton
+                                        color="primary"
+                                        onClick={() => handleOpenEditModal(params.row)}
+                                        sx={{ mr: 1 }}
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        color="error"
+                                        onClick={() => handleDelete(params.row.slug)}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </>
+                            ),
+                        }
+
+
+                       
+                    ]}
+                    autoHeight
+                    disableSelectionOnClick
                 />
-                <TextField
-                    sx={{ width: '90%', marginBottom: 2 }}
-                    label="Your Message"
-                    multiline
-                    rows={4}
-                    value={text}
-                    onChange={handleTextChange}
-                    fullWidth
-                    variant="outlined"
-                />
-                <FormControl fullWidth margin="normal">
-                    <TextField
-                        select
-                        label="Status"
-                        value={status}
-                        onChange={handleStatusChange}
-                        sx={{ width: '60%', marginBottom: 2 }}
-                        SelectProps={{
-                            native: true,
-                        }}
-                    >
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </TextField>
-                </FormControl>
-                <Button
-                    sx={{ width: '10%', padding: '10px', fontSize: '16px' }}
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                >
-                    Submit
-                </Button>
-                {/* <CustomEditor/> */}
-            </FormControl>
+            </Card>
+
+            <CMSContentModal
+                open={addModalOpen}
+                handleClose={handleCloseAddModal}
+                handleSubmit={handleAddSubmit}
+                pages={pages}
+                selectedPages={selectedPages}
+                setSelectedPages={setSelectedPages}
+                text={text}
+                setText={setText}
+                status={status}
+                setStatus={setStatus}
+                errorMessage={errorMessage}
+            />
+
+            <EditCMSContentModal
+                open={editModalOpen}
+                handleClose={handleCloseEditModal}
+                handleEditSubmit={handleEditSubmit}
+                text={text}
+                setText={setText}
+                status={status}
+                setStatus={setStatus}
+                errorMessage={errorMessage}
+            />
         </Container>
     );
 };
 
-export default PageNameDropdown;
+export default CMSContentTable;

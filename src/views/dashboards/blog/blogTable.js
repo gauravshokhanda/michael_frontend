@@ -5,6 +5,9 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import EditBlogModal from './EditBlogModal'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 const BlogTable = ({ refreshTable }) => {
   const [rows, setRows] = useState([]);
@@ -115,30 +118,27 @@ const BlogTable = ({ refreshTable }) => {
           { field: 'tags', headerName: 'Tags', flex: 0.2, minWidth: 150 },
           { field: 'published', headerName: 'Published', flex: 0.1, minWidth: 50 },
          
+         
           {
             field: 'Action',
             headerName: 'Action',
-            flex: 0.2,
-            minWidth: 150,
+            flex: 0.3,
+            minWidth: 200,
             renderCell: ({ row }) => (
               <>
-                <Button
-                  variant="outlined"
+                <IconButton
                   color="primary"
-                  size="small"
                   onClick={() => handleEdit(row.id)}
                   sx={{ mr: 1 }}
                 >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
+                  <EditIcon />
+                </IconButton>
+                <IconButton
                   color="error"
-                  size="small"
                   onClick={() => handleDelete(row.id)}
                 >
-                  Delete
-                </Button>
+                  <DeleteIcon />
+                </IconButton>
               </>
             ),
           },

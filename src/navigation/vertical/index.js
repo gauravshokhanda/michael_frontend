@@ -24,6 +24,11 @@ const navigation = () => {
       icon: MessageOutline,
       path: '/dashboards/cms'
     },
+    {
+      title: 'EnquiryForm',
+      icon: MessageOutline,
+      path: '/dashboards/viewDetails'
+    },
    
   ]
 }

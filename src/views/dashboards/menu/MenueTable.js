@@ -4,11 +4,11 @@ import { DataGrid } from '@mui/x-data-grid';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import AddMenuModal from './AddMenuModal.js';
 import EditMenuModal from './EditMenuModal.js';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 
 const MenuTable = ({ refreshTable }) => {
@@ -200,7 +200,7 @@ const MenuTable = ({ refreshTable }) => {
                 />
             </Card>
 
-            {/* Edit Modal */}
+            
             <EditMenuModal
                 open={editModalOpen}
                 menu={currentMenu}
