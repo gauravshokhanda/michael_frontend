@@ -7,8 +7,8 @@ import Grid from '@mui/material/Grid';
 import AddMenuModal from './AddMenuModal.js';
 import EditMenuModal from './EditMenuModal.js';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 
 const MenuTable = ({ refreshTable }) => {
@@ -168,7 +168,7 @@ const MenuTable = ({ refreshTable }) => {
                     columns={[
                         { field: 'serialNumber', headerName: 'S.No', flex: 0.1, minWidth: 100 },
                         { field: 'name', headerName: 'Menu Name', flex: 0.3, minWidth: 200 },
-                        { field: 'link', headerName: 'Link', flex: 0.3, minWidth: 200 },
+                        { field: 'link', headerName: 'Slug', flex: 0.3, minWidth: 200 },
                         { field: 'sortOrder', headerName: 'Sort Order', flex: 0.2, minWidth: 150 },
                         {
                             field: 'Action',

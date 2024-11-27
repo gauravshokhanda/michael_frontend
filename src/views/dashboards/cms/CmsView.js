@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { Button, Container, Card, Grid } from '@mui/material';
 import CMSContentModal from './CMSContentModal';
@@ -7,6 +6,7 @@ import EditCMSContentModal from './EditCMSContentModal';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axiosInstance from '../axiosInstance/axiosInstance';
 
 const CMSContentTable = () => {
     const [rows, setRows] = useState([]);
@@ -24,7 +24,7 @@ const CMSContentTable = () => {
     // Fetch pages for dropdown
     const fetchPages = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/menus/');
+            const response = await axiosInstance.get('/menus');
             setPages(response.data);
         } catch (error) {
             console.error('Error fetching pages:', error);
@@ -35,7 +35,7 @@ const CMSContentTable = () => {
     const fetchContent = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:5000/api/contents');
+            const response = await axiosInstance.get('/contents');
             const contentData = response.data;
 
             const formattedRows = contentData.map((content, index) => ({
@@ -44,7 +44,6 @@ const CMSContentTable = () => {
                 slug: content.slug,
                 body: content.body,
                 status: content.status,
-           
             }));
 
             setRows(formattedRows);
@@ -106,7 +105,7 @@ const CMSContentTable = () => {
         try {
             await Promise.all(
                 requestData.map((data) =>
-                    axios.post('http://localhost:5000/api/contents', data)
+                    axiosInstance.post('/contents', data)
                 )
             );
             alert('Content added successfully!');
@@ -119,32 +118,30 @@ const CMSContentTable = () => {
         }
     };
 
-
-
     const handleOpenEditModal = (row) => {
         setEditRowSlug(row.slug); // Save the slug for the selected row
         setText(row.body);
         setStatus(row.status);
         setEditModalOpen(true);
     };
+
     const handleDelete = async (slug) => {
         const confirmDelete = window.confirm(
             'Are you sure you want to delete this content? This action cannot be undone.'
         );
 
         if (!confirmDelete) {
-            return; // Exit if the user cancels the deletion
+            return;
         }
 
         try {
-            await axios.delete(`http://localhost:5000/api/contents/${slug}`);
+            await axiosInstance.delete(`/contents/${slug}`);
             fetchContent();
         } catch (error) {
             console.error('Error deleting content:', error);
             alert('Failed to delete content. Please try again.');
         }
     };
-
 
     const handleCloseEditModal = () => {
         setEditModalOpen(false);
@@ -154,7 +151,6 @@ const CMSContentTable = () => {
         let isValid = true;
         let errors = {};
 
-        // Validation checks
         if (!text.trim()) {
             errors.body = 'Body cannot be empty.';
             isValid = false;
@@ -171,10 +167,11 @@ const CMSContentTable = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5000/api/contents/${editRowSlug}`, {
+            await axiosInstance.put(`/contents/${editRowSlug}`, {
                 body: text,
                 status,
             });
+
             alert('Content updated successfully!');
             fetchContent();
             setErrorMessage({}); // Clear errors
@@ -185,13 +182,9 @@ const CMSContentTable = () => {
         }
     };
 
-
-
-
     return (
         <Container sx={{ marginTop: 4 }}>
-           
-            <Grid item xs={11} lg={11} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: "10px" }}>
+            <Grid item xs={11} lg={11} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
                 <Button variant="contained" onClick={handleOpenAddModal}>Add New CMS Content</Button>
             </Grid>
             <Card>
@@ -203,7 +196,6 @@ const CMSContentTable = () => {
                         { field: 'slug', headerName: 'Slug', flex: 0.3, minWidth: 150 },
                         { field: 'body', headerName: 'Body', flex: 0.5, minWidth: 300 },
                         { field: 'status', headerName: 'Status', flex: 0.2, minWidth: 120 },
-                       
                         {
                             field: 'actions',
                             headerName: 'Actions',
@@ -211,25 +203,15 @@ const CMSContentTable = () => {
                             minWidth: 150,
                             renderCell: (params) => (
                                 <>
-                                    <IconButton
-                                        color="primary"
-                                        onClick={() => handleOpenEditModal(params.row)}
-                                        sx={{ mr: 1 }}
-                                    >
+                                    <IconButton color="primary" onClick={() => handleOpenEditModal(params.row)} sx={{ mr: 1 }}>
                                         <EditIcon />
                                     </IconButton>
-                                    <IconButton
-                                        color="error"
-                                        onClick={() => handleDelete(params.row.slug)}
-                                    >
+                                    <IconButton color="error" onClick={() => handleDelete(params.row.slug)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </>
                             ),
-                        }
-
-
-                       
+                        },
                     ]}
                     autoHeight
                     disableSelectionOnClick

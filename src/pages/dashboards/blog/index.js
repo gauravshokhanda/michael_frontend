@@ -2,21 +2,11 @@
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button';
 
-
-// ** Icons Imports
-import Check from 'mdi-material-ui/Check'
-import TrendingUp from 'mdi-material-ui/TrendingUp'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import TruckOutline from 'mdi-material-ui/TruckOutline'
-
-// ** Custom Components Imports
-
-
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
-import EcommerceTable from 'src/views/dashboards/blog/blogTable'
+import BlogTable from 'src/views/dashboards/blog/blogTable'
 import AddBlogModal from 'src/views/dashboards/blog/AddBlogModal'
 import { useState } from 'react';
 
@@ -38,7 +28,7 @@ const EcommerceDashboard = () => {
           <Grid item xs={11} lg={11} sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom:"10px"}}>
             <Button variant="contained" onClick={() => setOpenModal(true)}>Add Blog</Button>
           </Grid>
-          <EcommerceTable refreshTable={refreshTable} />
+          <BlogTable refreshTable={refreshTable} />
           <AddBlogModal
             open={openModal}
             onClose={() => setOpenModal(false)}

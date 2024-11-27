@@ -1,6 +1,19 @@
-// src/components/AddBlogModal.js
 import { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Typography, Box } from '@mui/material';
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    TextField,
+    Button,
+    Typography,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    FormHelperText,
+} from '@mui/material';
 import axios from 'axios';
 
 const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
@@ -10,40 +23,65 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
     const [author, setAuthor] = useState('');
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [published, setPublished] = useState('No');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({}); // State to track field-specific errors
+
+    const validateFields = () => {
+        const fieldErrors = {};
+
+        if (!title.trim()) {
+            fieldErrors.title = 'Title is required.';
+        }
+        if (!content.trim()) {
+            fieldErrors.content = 'Content is required.';
+        }
+        if (!author.trim()) {
+            fieldErrors.author = 'Author is required.';
+        }
+        if (tags && tags.split(',').some((tag) => tag.trim() === '')) {
+            fieldErrors.tags = 'Tags must not contain empty values.';
+        }
+        if (!image) {
+            fieldErrors.image = 'An image is required.';
+        } else if (!['image/jpeg', 'image/png', 'image/gif'].includes(image.type)) {
+            fieldErrors.image = 'Invalid image format. Only JPEG, PNG, and GIF are allowed.';
+        } else if (image.size > 2 * 1024 * 1024) { // Limit size to 2MB
+            fieldErrors.image = 'Image size must be less than 2MB.';
+        }
+
+        return fieldErrors;
+    };
 
     const handleSubmit = async () => {
-        if (!title.trim() || !content.trim() || !author.trim()) {
-            setError('All fields (Title, Content, Author) are required.');
+        const fieldErrors = validateFields();
+
+        if (Object.keys(fieldErrors).length > 0) {
+            setErrors(fieldErrors); // Display errors
             return;
         }
 
         try {
             setLoading(true);
-            setError('');
+            setErrors({}); // Clear errors before submission
 
-            // Create form data for the request
             const formData = new FormData();
             formData.append('title', title);
             formData.append('content', content);
-            formData.append('tags', tags.split(',').map(tag => tag.trim())); // Convert tags to an array
+            formData.append('tags', tags.split(',').map((tag) => tag.trim()));
             formData.append('author', author);
+            formData.append('published', published);
             if (image) {
-                formData.append('image', image); // Append the image file
+                formData.append('image', image);
             }
 
-            const token = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
-            console.log('Token:', token);
-
+            const token = localStorage.getItem('accessToken');
             const response = await axios.post('http://localhost:5000/api/blogs/', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
-            console.log("formData", formData);
 
             if (response.data.success) {
                 onBlogAdded(response.data.data);
@@ -53,13 +91,14 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                 setAuthor('');
                 setImage(null);
                 setImagePreview(null);
-                onClose(); // Close the modal after adding the blog
+                setPublished('No');
+                onClose();
             } else {
-                setError(`Error: ${response.data.message}`);
+                setErrors({ form: response.data.message || 'An unknown error occurred.' });
             }
         } catch (error) {
             console.error('Error adding blog:', error);
-            setError('An error occurred while adding the blog.');
+            setErrors({ form: 'An error occurred while adding the blog. Please try again.' });
         } finally {
             setLoading(false);
         }
@@ -77,9 +116,9 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Add New Blog</DialogTitle>
             <DialogContent>
-                {error && (
+                {errors.form && (
                     <Typography color="error" variant="body2" sx={{ mb: 2 }}>
-                        {error}
+                        {errors.form}
                     </Typography>
                 )}
                 <TextField
@@ -90,6 +129,8 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                     variant="outlined"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    error={!!errors.title}
+                    helperText={errors.title}
                 />
                 <TextField
                     margin="dense"
@@ -100,6 +141,8 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                     rows={4}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
+                    error={!!errors.content}
+                    helperText={errors.content}
                 />
                 <TextField
                     margin="dense"
@@ -108,6 +151,8 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                     variant="outlined"
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
+                    error={!!errors.tags}
+                    helperText={errors.tags}
                 />
                 <TextField
                     margin="dense"
@@ -116,7 +161,23 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                     variant="outlined"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
+                    error={!!errors.author}
+                    helperText={errors.author}
                 />
+
+                <FormControl fullWidth sx={{ mt: 2 }} error={!!errors.published}>
+                    <InputLabel>Published</InputLabel>
+                    <Select
+                        value={published}
+                        onChange={(e) => setPublished(e.target.value)}
+                        label="Published"
+                    >
+                        <MenuItem value="Yes">Yes</MenuItem>
+                        <MenuItem value="No">No</MenuItem>
+                    </Select>
+                    {errors.published && <FormHelperText>{errors.published}</FormHelperText>}
+                </FormControl>
+
                 <Button
                     variant="outlined"
                     component="label"
@@ -130,13 +191,23 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
                         onChange={handleImageChange}
                     />
                 </Button>
+                {errors.image && (
+                    <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                        {errors.image}
+                    </Typography>
+                )}
                 {imagePreview && (
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="subtitle2">Preview:</Typography>
                         <img
                             src={imagePreview}
                             alt="Selected"
-                            style={{ maxWidth: '100%', height: 'auto', marginTop: '8px', borderRadius: '4px' }}
+                            style={{
+                                maxWidth: '100%',
+                                height: 'auto',
+                                marginTop: '8px',
+                                borderRadius: '4px',
+                            }}
                         />
                     </Box>
                 )}

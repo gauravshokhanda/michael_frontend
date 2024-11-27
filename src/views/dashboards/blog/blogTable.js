@@ -4,17 +4,22 @@ import { DataGrid } from '@mui/x-data-grid';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import EditBlogModal from './EditBlogModal'
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
+import EditBlogModal from './EditBlogModal';
 
 const BlogTable = ({ refreshTable }) => {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [currentBlog, setCurrentBlog] = useState(null);
-
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // State for delete confirmation dialog
+  const [blogToDelete, setBlogToDelete] = useState(null); // Blog ID to delete
 
   const fetchBlogs = () => {
     setLoading(true);
@@ -30,7 +35,7 @@ const BlogTable = ({ refreshTable }) => {
           content: blog.content,
           author: blog.author,
           tags: blog.tags.join(', '),
-          published: blog.published ? 'Yes' : 'No',
+          published: blog.published,
           image: blog.image,
           createdAt: new Date(blog.createdAt).toLocaleDateString(),
           updatedAt: new Date(blog.updatedAt).toLocaleDateString(),
@@ -44,22 +49,28 @@ const BlogTable = ({ refreshTable }) => {
         setLoading(false);
       });
   };
-  const handleDelete = async (id) => {
+
+  const confirmDelete = (id) => {
+    setBlogToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDelete = async () => {
     try {
-      // Send DELETE request to the API
-      const token = localStorage.getItem('accessToken'); // Retrieve token for authentication if required
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      const token = localStorage.getItem('accessToken');
+      await axios.delete(`http://localhost:5000/api/blogs/${blogToDelete}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include token if needed
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      // Refresh the table after successful deletion
-      fetchBlogs();
+      fetchBlogs(); // Refresh the table
+      setDeleteDialogOpen(false); // Close confirmation dialog
     } catch (error) {
       console.error('Error deleting blog:', error);
     }
   };
+
   const handleEdit = async (id) => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -68,22 +79,23 @@ const BlogTable = ({ refreshTable }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCurrentBlog(response.data.data); // Set the fetched blog data
-      setEditModalOpen(true); // Open the edit modal
+      setCurrentBlog(response.data.data);
+      setEditModalOpen(true);
     } catch (error) {
       console.error('Error fetching blog details:', error);
     }
   };
+
   const handleBlogUpdated = (updatedBlog) => {
-    setRows((prevRows) => prevRows.map((row) => (row.id === updatedBlog.id ? updatedBlog : row)));
+    setRows((prevRows) =>
+      prevRows.map((row) => (row.id === updatedBlog.id ? updatedBlog : row))
+    );
     setEditModalOpen(false); // Close the modal
   };
 
-
-
   useEffect(() => {
     fetchBlogs();
-  }, [refreshTable, editModalOpen]); 
+  }, [refreshTable, editModalOpen]);
 
   if (loading) {
     return <Typography variant="h6" align="center">Loading data...</Typography>;
@@ -101,7 +113,7 @@ const BlogTable = ({ refreshTable }) => {
             headerName: 'Image',
             flex: 0.2,
             minWidth: 150,
-            renderCell: ({ row }) => (
+            renderCell: ({ row }) =>
               row.image ? (
                 <img
                   src={row.image}
@@ -110,15 +122,12 @@ const BlogTable = ({ refreshTable }) => {
                 />
               ) : (
                 <Typography variant="body2">No Image</Typography>
-              )
-            ),
+              ),
           },
           { field: 'title', headerName: 'Title', flex: 0.25, minWidth: 200 },
           { field: 'content', headerName: 'Content', flex: 0.4, minWidth: 250 },
           { field: 'tags', headerName: 'Tags', flex: 0.2, minWidth: 150 },
           { field: 'published', headerName: 'Published', flex: 0.1, minWidth: 50 },
-         
-         
           {
             field: 'Action',
             headerName: 'Action',
@@ -135,19 +144,19 @@ const BlogTable = ({ refreshTable }) => {
                 </IconButton>
                 <IconButton
                   color="error"
-                  onClick={() => handleDelete(row.id)}
+                  onClick={() => confirmDelete(row.id)}
                 >
                   <DeleteIcon />
                 </IconButton>
               </>
             ),
           },
-
         ]}
         autoHeight
         hideFooter
         disableSelectionOnClick
       />
+
       {editModalOpen && currentBlog && (
         <EditBlogModal
           open={editModalOpen}
@@ -156,6 +165,32 @@ const BlogTable = ({ refreshTable }) => {
           onBlogUpdated={handleBlogUpdated}
         />
       )}
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this blog?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setDeleteDialogOpen(false)}
+            color="primary"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDelete}
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   );
 };
