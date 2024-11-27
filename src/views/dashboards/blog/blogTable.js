@@ -74,6 +74,7 @@ const BlogTable = ({ refreshTable }) => {
   const handleEdit = async (id) => {
     try {
       const token = localStorage.getItem('accessToken');
+
       const response = await axios.get(`http://localhost:5000/api/blogs/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,

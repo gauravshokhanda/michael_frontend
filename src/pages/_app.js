@@ -32,6 +32,7 @@ import GuestGuard from 'src/@core/components/auth/GuestGuard'
 import WindowWrapper from 'src/@core/components/window-wrapper'
 import { ApolloProvider } from '@apollo/client'
 import apolloClient from '../lib/apollo'
+
 // ** Spinner Import
 import Spinner from 'src/@core/components/spinner'
 

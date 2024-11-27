@@ -58,7 +58,8 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
 
         if (Object.keys(fieldErrors).length > 0) {
             setErrors(fieldErrors); // Display errors
-            return;
+            
+return;
         }
 
         try {
@@ -76,6 +77,7 @@ const AddBlogModal = ({ open, onClose, onBlogAdded }) => {
             }
 
             const token = localStorage.getItem('accessToken');
+
             const response = await axios.post('http://localhost:5000/api/blogs/', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
