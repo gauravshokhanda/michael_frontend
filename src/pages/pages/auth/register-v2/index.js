@@ -42,11 +42,10 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 import * as yup from 'yup'
 
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { timeZone } from 'src/constants/timezone'
 import { currency } from 'src/constants/currency'
-import { passwordminlength, nameminlength } from "src/constants/validations";
-
+import { passwordminlength, nameminlength } from 'src/constants/validations'
 
 // ** Styled Components
 const RegisterIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -125,8 +124,6 @@ const showErrors = (field, valueLen, min) => {
   }
 }
 
-
-
 const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup
@@ -142,7 +139,6 @@ const schema = yup.object().shape({
   company: yup.string().required('company is required'),
   checkbox: yup.boolean().required('You must agree to the terms and conditions')
 })
-
 
 const RegisterV2 = () => {
   // ** States
@@ -175,7 +171,6 @@ const RegisterV2 = () => {
   const { skin } = settings
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
-
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }
@@ -201,7 +196,6 @@ const RegisterV2 = () => {
               src={`/images/pages/${imageSource}-${theme.palette.mode}.png`}
             />
           </RegisterIllustrationWrapper>
-  
         </Box>
       ) : null}
       <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>
@@ -303,248 +297,247 @@ const RegisterV2 = () => {
               <Typography variant='body2'>Make your app management easy and fun!</Typography>
             </Box>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl fullWidth>
-              <Controller
-                name='name'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    value={value}
-                    register={register}
-                    label='name'
-                    onChange={onChange}
-                    sx={{ mb: 3 }}
-                    placeholder='Leonard'
-                    error={Boolean(errors.name)}
-                    aria-describedby='validation-schema-first-name'
-                  />
+              <FormControl fullWidth>
+                <Controller
+                  name='name'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      value={value}
+                      register={register}
+                      label='name'
+                      onChange={onChange}
+                      sx={{ mb: 3 }}
+                      placeholder='Leonard'
+                      error={Boolean(errors.name)}
+                      aria-describedby='validation-schema-first-name'
+                    />
+                  )}
+                />
+                {errors.name && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-first-name'>
+                    {errors.name.message}
+                  </FormHelperText>
                 )}
-              />
-              {errors.name && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-first-name'>
-                  {errors.name.message}
-                </FormHelperText>
-              )}
-            </FormControl>
-            <FormControl fullWidth>
-              <Controller
-                name='company'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    value={value}
-                    register={register}
-                    label='Company'
-                    onChange={onChange}
-                    sx={{ mb: 3 }}
-                    placeholder='company name'
-                    error={Boolean(errors.company)}
-                    aria-describedby='validation-schema-company'
-                  />
+              </FormControl>
+              <FormControl fullWidth>
+                <Controller
+                  name='company'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      value={value}
+                      register={register}
+                      label='Company'
+                      onChange={onChange}
+                      sx={{ mb: 3 }}
+                      placeholder='company name'
+                      error={Boolean(errors.company)}
+                      aria-describedby='validation-schema-company'
+                    />
+                  )}
+                />
+                {errors.company && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-company'>
+                    {errors.company.message}
+                  </FormHelperText>
                 )}
-              />
-              {errors.company && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-company'>
-                  {errors.company.message}
-                </FormHelperText>
-              )}
-            </FormControl>
-            <FormControl fullWidth>
-              <Controller
-                name='email'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <TextField
-                    type='email'
-                    value={value}
-                    register={register}
-                    label='Email'
-                    sx={{ mb: 3 }}
-                    onChange={onChange}
-                    error={Boolean(errors.email)}
-                    placeholder='carterleonard@gmail.com'
-                    aria-describedby='validation-schema-email'
-                  />
+              </FormControl>
+              <FormControl fullWidth>
+                <Controller
+                  name='email'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <TextField
+                      type='email'
+                      value={value}
+                      register={register}
+                      label='Email'
+                      sx={{ mb: 3 }}
+                      onChange={onChange}
+                      error={Boolean(errors.email)}
+                      placeholder='carterleonard@gmail.com'
+                      aria-describedby='validation-schema-email'
+                    />
+                  )}
+                />
+                {errors.email && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-email'>
+                    {errors.email.message}
+                  </FormHelperText>
                 )}
-              />
-              {errors.email && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-email'>
-                  {errors.email.message}
-                </FormHelperText>
-              )}
-            </FormControl>
+              </FormControl>
 
-            <FormControl fullWidth>
-              <InputLabel htmlFor='validation-schema-password' error={Boolean(errors.password)}>
-                Password
-              </InputLabel>
-              <Controller
-                name='password'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <OutlinedInput
-                    value={value}
-                    register={register}
-                    label='Password'
-                    sx={{ mb: 3 }}
-                    onChange={onChange}
-                    id='validation-schema-password'
-                    error={Boolean(errors.password)}
-                    type={state.showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          edge='end'
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          aria-label='toggle password visibility'
-                        >
-                          {state.showPassword ? <EyeOutline /> : <EyeOffOutline />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
+              <FormControl fullWidth>
+                <InputLabel htmlFor='validation-schema-password' error={Boolean(errors.password)}>
+                  Password
+                </InputLabel>
+                <Controller
+                  name='password'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <OutlinedInput
+                      value={value}
+                      register={register}
+                      label='Password'
+                      sx={{ mb: 3 }}
+                      onChange={onChange}
+                      id='validation-schema-password'
+                      error={Boolean(errors.password)}
+                      type={state.showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position='end'>
+                          <IconButton
+                            edge='end'
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            aria-label='toggle password visibility'
+                          >
+                            {state.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  )}
+                />
+                {errors.password && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-password'>
+                    {errors.password.message}
+                  </FormHelperText>
                 )}
-              />
-              {errors.password && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-password'>
-                  {errors.password.message}
-                </FormHelperText>
-              )}
-            </FormControl>
+              </FormControl>
 
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-helper-label' error={Boolean(errors.timeZone)}>
-                TimeZone
-              </InputLabel>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-helper-label' error={Boolean(errors.timeZone)}>
+                  TimeZone
+                </InputLabel>
 
-              <Controller
-                name='timeZone'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <Select
-                    sx={{ mb: 3 }}
-                    value={value}
-                    register={register}
-                    onChange={onChange}
-                    error={Boolean(errors.timeZone)}
-                    label='timeZone'
-                    defaultValue=''
-                    id='demo-simple-select-helper'
-                    labelId='demo-simple-select-helper-label'
-                  >
-                    {timeZone.map(item => (
-                      <MenuItem key={item.code} value={item.value}>
-                        {item.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                <Controller
+                  name='timeZone'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <Select
+                      sx={{ mb: 3 }}
+                      value={value}
+                      register={register}
+                      onChange={onChange}
+                      error={Boolean(errors.timeZone)}
+                      label='timeZone'
+                      defaultValue=''
+                      id='demo-simple-select-helper'
+                      labelId='demo-simple-select-helper-label'
+                    >
+                      {timeZone.map(item => (
+                        <MenuItem key={item.code} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                {errors.timeZone && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-select'>
+                    {errors.timeZone.message}
+                  </FormHelperText>
                 )}
-              />
-              {errors.timeZone && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-select'>
-                  {errors.timeZone.message}
-                </FormHelperText>
-              )}
-            </FormControl>
+              </FormControl>
 
-            <FormControl fullWidth>
-              <InputLabel id='demo-simple-select-helper-label' error={Boolean(errors.currency)}>
-                currency
-              </InputLabel>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-helper-label' error={Boolean(errors.currency)}>
+                  currency
+                </InputLabel>
 
-              <Controller
-                name='currency'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <Select
-                    sx={{ mb: 3 }}
-                    register={register}
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.currency)}
-                    label='Currency'
-                    defaultValue=''
-                    id='demo-simple-select-helper'
-                    labelId='demo-simple-select-helper-label'
-                  >
-                    {currency.map(item => (
-                      <MenuItem key={item.abbr} value={item.value}>
-                        {item.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                <Controller
+                  name='currency'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <Select
+                      sx={{ mb: 3 }}
+                      register={register}
+                      value={value}
+                      onChange={onChange}
+                      error={Boolean(errors.currency)}
+                      label='Currency'
+                      defaultValue=''
+                      id='demo-simple-select-helper'
+                      labelId='demo-simple-select-helper-label'
+                    >
+                      {currency.map(item => (
+                        <MenuItem key={item.abbr} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+                {errors.currency && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-select'>
+                    {errors.currency.message}
+                  </FormHelperText>
                 )}
-              />
-              {errors.currency && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-schema-select'>
-                  {errors.currency.message}
-                </FormHelperText>
-              )}
-            </FormControl>
+              </FormControl>
 
-            <FormControl>
-              <Controller
-                name='checkbox'
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <FormControlLabel
-                    label={
-                      <Fragment>
-                        <span>I agree to </span>
-                        <Link href='/' passHref>
-                          <LinkStyled onClick={e => e.preventDefault()}>privacy policy & terms</LinkStyled>
-                        </Link>
-                      </Fragment>
-                    }
-                   
-                    sx={errors.checkbox ? { color: 'error.main' } : null}
-                    control={
-                      <Checkbox
-                        {...field}
-                        name='validation-basic-checkbox'
-                        sx={errors.checkbox ? { color: 'error.main' } : null}
-                      />
-                    }
-                  />
+              <FormControl>
+                <Controller
+                  name='checkbox'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      label={
+                        <Fragment>
+                          <span>I agree to </span>
+                          <Link href='/' passHref>
+                            <LinkStyled onClick={e => e.preventDefault()}>privacy policy & terms</LinkStyled>
+                          </Link>
+                        </Fragment>
+                      }
+                      sx={errors.checkbox ? { color: 'error.main' } : null}
+                      control={
+                        <Checkbox
+                          {...field}
+                          name='validation-basic-checkbox'
+                          sx={errors.checkbox ? { color: 'error.main' } : null}
+                        />
+                      }
+                    />
+                  )}
+                />
+                {errors.checkbox && (
+                  <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-checkbox'>
+                    This field is required
+                  </FormHelperText>
                 )}
-              />
-              {errors.checkbox && (
-                <FormHelperText sx={{ color: 'error.main' }} id='validation-basic-checkbox'>
-                  This field is required
-                </FormHelperText>
-              )}
-            </FormControl>
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-              Sign up
-            </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography variant='body2' sx={{ mr: 2 }}>
-                Already have an account?
-              </Typography>
-              <Typography variant='body2'>
-                <Link passHref href='/pages/auth/login-v1'>
-                  <LinkStyled>Sign in instead</LinkStyled>
+              </FormControl>
+              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+                Sign up
+              </Button>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Typography variant='body2' sx={{ mr: 2 }}>
+                  Already have an account?
+                </Typography>
+                <Typography variant='body2'>
+                  <Link passHref href='/pages/auth/login-v1'>
+                    <LinkStyled>Sign in instead</LinkStyled>
+                  </Link>
+                </Typography>
+              </Box>
+              <Divider sx={{ my: 5 }}>or</Divider>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Link href='/' passHref>
+                  <IconButton component='a' onClick={e => e.preventDefault()}>
+                    <Google sx={{ color: '#db4437' }} />
+                    Login With Google
+                  </IconButton>
                 </Link>
-              </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                  Login With Google
-                </IconButton>
-              </Link>
-            </Box>
-          </form>
+              </Box>
+            </form>
           </BoxWrapper>
         </Box>
       </RightWrapper>
