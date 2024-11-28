@@ -32,6 +32,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 // ** Third Party Imports
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Configs
@@ -165,7 +166,6 @@ const Register = () => {
               src={`/images/pages/${imageSource}-${theme.palette.mode}.png`}
             />
           </RegisterIllustrationWrapper>
-        
         </Box>
       ) : null}
       <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>

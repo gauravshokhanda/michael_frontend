@@ -61,7 +61,7 @@ const defaultSuggestionsData = [
     suggestions: [
       {
         suggestion: 'CRM',
-        link: '/dashboards/crm/',
+        link: '/dashboards/',
         icon: <ChartDonut fontSize='small' sx={{ mr: 2.5, color: 'text.primary' }} />
       },
       {

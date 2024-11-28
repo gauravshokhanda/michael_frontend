@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       setIsInitialized(true)
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
-      console.log("stored token", storedToken)
+      console.log('stored token', storedToken)
       if (storedToken) {
         setLoading(true)
         await axios
@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
           })
           .then(async response => {
             setLoading(false)
-            setUser({ ...response.data})
+            setUser({ ...response.data })
           })
           .catch(() => {
             localStorage.removeItem('userData')
@@ -77,16 +77,17 @@ const AuthProvider = ({ children }) => {
             }
           })
           .then(async response => {
-            console.log("router", router)
+            console.log('router', router)
             const returnUrl = router.query.returnUrl
-            console.log("returnUrl", returnUrl)
-            setUser({ ...response.data})
+            console.log('returnUrl', returnUrl)
+            setUser({ ...response.data })
 
             await window.localStorage.setItem('userData', JSON.stringify(response.data))
 
-            console.log("response.data.userData", response.data)
+            console.log('response.data.userData', response.data)
 
             const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+
             router.replace(redirectURL)
           })
       })
