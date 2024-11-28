@@ -138,10 +138,12 @@ const RegisterV1 = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+
   const onSubmit = data => {
     console.log(JSON.stringify(data))
   }
-  return (
+  
+return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ p: theme => `${theme.spacing(12, 9, 7)} !important` }}>

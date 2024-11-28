@@ -114,6 +114,7 @@ const defaultValues = {
   password: '',
   firstName: ''
 }
+
 const showErrors = (field, valueLen, min) => {
   if (valueLen === 0) {
     return `${field} field is required`
@@ -158,6 +159,8 @@ const RegisterV2 = () => {
     mode: 'onChange',
     resolver: yupResolver(schema)
   })
+
+
   // ** States
   const [state, setState] = useState({
     password: '',
@@ -183,10 +186,12 @@ const RegisterV2 = () => {
     event.preventDefault()
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-register-illustration-bordered' : 'auth-v2-register-illustration'
+
   const onSubmit = data => {
     console.log(JSON.stringify(data))
   }
-  return (
+  
+return (
     <Box className='content-right'>
       {!hidden ? (
         <Box sx={{ flex: 1, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>

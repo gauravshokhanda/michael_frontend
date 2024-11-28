@@ -21,7 +21,8 @@ const EcommerceDashboard = () => {
     setRefreshTable((prev) => !prev); // Toggle refresh state
     setOpenModal(false); // Close modal after adding the blog
   };
-  return (
+  
+return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} lg={12} sx={{ order: [1, 1, 1, 0] }}>

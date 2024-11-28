@@ -55,7 +55,8 @@ const AddMenuModal = ({ open, onClose, onSave }) => {
         }
 
         setErrors(newErrors);
-        return valid;
+        
+return valid;
     };
 
     const handleInputChange = (field, value) => {

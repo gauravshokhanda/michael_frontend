@@ -35,7 +35,8 @@ const EditMenuModal = ({ open, menu, onClose, onSave, onInputChange }) => {
         }
 
         setErrors(newErrors);
-        return valid;
+        
+return valid;
     };
 
     const handleSave = () => {
