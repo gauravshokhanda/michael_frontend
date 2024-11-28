@@ -64,6 +64,8 @@ const AuthProvider = ({ children }) => {
   }, [])
 
   const handleLogin = (params, errorCallback) => {
+    console.log(params, 'params')
+    alert(params)
     axios
       .post(authConfig.loginEndpoint, params)
       .then(async res => {
