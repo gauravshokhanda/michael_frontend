@@ -93,7 +93,8 @@ const CMSContentTable = () => {
 
         if (!isValid) {
             setErrorMessage(errors);
-            return;
+            
+return;
         }
 
         const requestData = selectedPages.map((page) => ({
@@ -163,7 +164,8 @@ const CMSContentTable = () => {
 
         if (!isValid) {
             setErrorMessage(errors);
-            return;
+            
+return;
         }
 
         try {

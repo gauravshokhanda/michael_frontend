@@ -70,7 +70,8 @@ const EditBlogModal = ({ open, onClose, blog, onBlogUpdated }) => {
 
         if (Object.keys(fieldErrors).length > 0) {
             setErrors(fieldErrors); // Display errors
-            return;
+            
+return;
         }
 
         try {
@@ -88,6 +89,7 @@ const EditBlogModal = ({ open, onClose, blog, onBlogUpdated }) => {
             }
 
             const token = localStorage.getItem('accessToken');
+
             const response = await axios.put(
                 `http://localhost:5000/api/blogs/${blog._id}`,
                 formData,
